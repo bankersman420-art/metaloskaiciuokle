@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Metalo skaičiuoklė</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: black !important;
+            color: white !important;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h1,
+        h2,
+        label,
+        p,
+        strong {
+            color: white !important;
+        }
+
+        section {
+            border: 1px solid white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: black !important;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid white;
+            border-radius: 6px;
+            background: black !important;
+            color: white !important;
+            font-size: 16px;
+        }
+
+        option {
+            background: black;
+            color: white;
+        }
+
+        .calculate {
+            width: 100%;
+            padding: 15px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .result {
+            font-size: 17px;
+        }
+
+        .result p {
+            margin: 12px 0;
+        }
+
+        .result strong {
+            float: right;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid white;
+            margin: 20px 0;
+        }
+
+        .total {
+            font-size: 22px;
+            font-weight: bold;
+            padding-top: 10px;
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 10px;
+            }
+
+            section {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+
+            .result {
+                font-size: 16px;
+            }
+
+            .total {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Metalo skaičiuoklė</h1>
+
+    <section>
+        <h2>1. Forma</h2>
+
+        <label>Pasirinkite formą:</label>
+
+        <select id="forma" onchange="rodytiLaukelius()">
+            <option value="staciakampis">Stačiakampis</option>
+            <option value="kvadratas">Kvadratas</option>
+            <option value="skritulys">Skritulys</option>
+            <option value="trikampis">Trikampis</option>
+            <option value="penkiakampis">Penkiakampis</option>
+            <option value="sesiakampis">Šešiakampis</option>
+        </select>
+
+        <div id="matmenuLaukeliai"></div>
+    </section>
+
+    <section>
+        <h2>2. Medžiaga</h2>
+
+        <label>Medžiaga:</label>
+
+        <select id="medziaga" onchange="parinktiTankį()">
+            <option value="7850">Plienas</option>
+            <option value="8000">Nerūdijantis plienas</option>
+            <option value="2700">Aliuminis</option>
+            <option value="8960">Varis</option>
+            <option value="other">Kitas</option>
+        </select>
+
+        <label>Tankis kg/m³:</label>
+        <input type="number" id="tankis" value="7850">
+
+        <label>Metalo kaina €/kg:</label>
+        <input type="number" id="metaloKaina" value="0" step="0.01">
+    </section>
+
+    <section>
+        <h2>3. Pjovimas</h2>
+
+        <label>Pjovimo kaina €/m:</label>
+        <input type="number" id="pjovimoKaina" value="0" step="0.01">
+    </section>
+
+    <section>
+        <h2>4. Skylės</h2>
+
+        <label>Skylės diametras mm:</label>
+        <input type="number" id="skylesDiametras" value="0">
+
+        <label>Skylių kiekis:</label>
+        <input type="number" id="skylesKiekis" value="0">
+    </section>
+
+    <button class="calculate" onclick="skaiciuoti()">
+        SKAIČIUOTI
+    </button>
+
+    <section>
+        <h2>5. Rezultatas</h2>
+
+        <div class="result">
+
+            <p>
+                Plotas:
+                <strong><span id="plotas">0</span> m²</strong>
+            </p>
+
+            <p>
+                Perimetras:
+                <strong><span id="perimetras">0</span> m</strong>
+            </p>
+
+            <p>
+                Svoris:
+                <strong><span id="svoris">0</span> kg</strong>
+            </p>
+
+            <hr>
+
+            <p>
+                Formos pjovimo ilgis:
+                <strong><span id="formosPjovimoIlgis">0</span> m</strong>
+            </p>
+
+            <p>
+                Skylių pjovimo ilgis:
+                <strong><span id="skyliuPjovimoIlgis">0</span> m</strong>
+            </p>
+
+            <p>
+                Viso pjovimo ilgis:
+                <strong><span id="visoPjovimoIlgis">0</span> m</strong>
+            </p>
+
+            <hr>
+
+            <p>
+                Metalo kaina:
+                <strong><span id="metaloKainosRezultatas">0</span> €</strong>
+            </p>
+
+            <p>
+                Formos pjovimo kaina:
+                <strong><span id="formosPjovimoKaina">0</span> €</strong>
+            </p>
+
+            <p>
+                Skylių pjovimo kaina:
+                <strong><span id="skyliuPjovimoKaina">0</span> €</strong>
+            </p>
+
+            <p class="total">
+                VISA KAINA:
+                <strong><span id="visaKaina">0</span> €</strong>
+            </p>
+
+        </div>
+    </section>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "Metalo skaičiuoklė",
+  "short_name": "Metalo sk.",
+  "description": "Metalo ploto, svorio ir kainos skaičiuoklė",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000"
+}
